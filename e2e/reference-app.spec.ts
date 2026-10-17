@@ -167,7 +167,7 @@ test("developer guide embeds the ownership chain and real source excerpts", asyn
   await expect(lifecycleDetail.getByText("The service is the authority for ownership", { exact: false })).toBeVisible();
   await expect(lifecycleDetail.getByRole("link", { name: /View implementation/ })).toHaveAttribute("href", /src\/examples\/service\.ts#L66-L83$/);
   await expect(lifecycleDetail.getByRole("link", { name: /Open Architecture Design skill/ })).toHaveAttribute("href", "/library?skill=architecture-building#skills");
-  await expect(page.getByRole("heading", { name: "Give every state one owner." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Put each kind of state where it can stay correct." })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Evidence follows the architecture." })).toBeVisible();
   const browserEvidence = page.getByRole("button", { name: /Browser Optimistic rollback/ });
   await browserEvidence.click();
@@ -190,6 +190,83 @@ test("mobile developer guide keeps every source excerpt accessible", async ({ pa
   expect(verticalCodeOverflow).toBeLessThanOrEqual(1);
   await page.getByRole("button", { name: /Visual Deterministic desktop/ }).click();
   await expect(page.getByText("Prove hierarchy, spacing, typography", { exact: false })).toBeVisible();
+  const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(pageOverflow).toBeLessThanOrEqual(1);
+});
+
+test("state playbook demonstrates shared cache, race recovery, and stale-write protection", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await page.goto("/guide#guide-state");
+
+  await expect(page.getByRole("heading", { name: "Put each kind of state where it can stay correct." })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Points update everywhere/ })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "Shared points" }).click();
+  await expect(page.getByLabel("Top bar points")).toHaveText("740 pts");
+  await page.getByRole("button", { name: "Award 25" }).click();
+  await expect(page.getByLabel("Top bar points")).toHaveText("765 pts");
+  await expect(page.getByLabel("Page points")).toHaveText("765");
+  await page.getByRole("button", { name: "Simulate rejection" }).click();
+  await expect(page.getByRole("status")).toContainText("rolled back");
+  await expect(page.getByLabel("Top bar points")).toHaveText("765 pts");
+
+  await page.getByRole("tab", { name: "Request race" }).click();
+  await page.getByRole("button", { name: "Run broken race" }).click();
+  await expect(page.getByText("A resolved late and overwrote", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Run fixed race" }).click();
+  await expect(page.getByText("A aborted: selection and query key changed")).toBeVisible();
+
+  await page.getByRole("tab", { name: "Two-window save" }).click();
+  await page.getByLabel("Window A value").fill("Launch: Nov 1");
+  await page.getByRole("button", { name: "Save expected rev 12" }).first().click();
+  await page.getByLabel("Window B value").fill("Launch: Nov 2");
+  await page.getByRole("button", { name: "Save expected rev 12" }).click();
+  await expect(page.getByRole("status")).toContainText("received 409");
+});
+
+test("every state scenario has a live collaborative demo that accepts human input", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await page.goto("/guide#guide-state");
+
+  const pointsDemo = page.getByLabel("A shared balance changes across two surfaces live demo");
+  await pointsDemo.scrollIntoViewIfNeeded();
+  await expect(pointsDemo).toHaveAttribute("data-loop-duration-ms", "3300");
+  await expect(pointsDemo.getByText("LIVE USAGE · 20× PLAYBACK · 3.3 SECOND LOOP")).toBeVisible();
+  await expect(pointsDemo.locator(".live-cursor").first()).toBeVisible({ timeout: 1_000 });
+  await pointsDemo.getByRole("button", { name: "Replay" }).click();
+  await pointsDemo.getByRole("button", { name: "Pause" }).click();
+  await pointsDemo.getByLabel("Award amount").fill("12");
+  await pointsDemo.getByRole("button", { name: "Award points" }).click();
+  await expect(pointsDemo.getByText("752 pts")).toBeVisible();
+
+  await page.getByRole("tab", { name: /Out-of-order responses/ }).click();
+  await expect(page.getByLabel("Two requests finish in the wrong order live demo")).toBeVisible();
+  await page.getByRole("tab", { name: /Two windows save one record/ }).click();
+  const windowsDemo = page.getByLabel("Two tabs edit one versioned record live demo");
+  await windowsDemo.getByRole("button", { name: "Pause" }).click();
+  await windowsDemo.getByLabel("Live Window A value").fill("Launch: Nov 8");
+  await windowsDemo.getByRole("button", { name: "Save" }).first().click();
+  await expect(windowsDemo.getByText("Launch: Nov 8")).toBeVisible();
+
+  await page.getByRole("tab", { name: /Chat, unread counts, and presence/ }).click();
+  const chatDemo = page.getByLabel("Messages, presence, and unread state move together live demo");
+  await expect(chatDemo.locator(".message-list article.mine")).toContainText("I’m checking the retry before we ship.", { timeout: 3_000 });
+  await chatDemo.getByRole("button", { name: "Pause" }).click();
+  await chatDemo.getByRole("textbox", { name: "Live chat message" }).fill("Human input joins the same state flow");
+  await chatDemo.getByRole("button", { name: "Send live chat message" }).click();
+  await expect(chatDemo.getByText("Human input joins the same state flow")).toBeVisible();
+
+  await page.getByRole("tab", { name: /Collaborative document editor/ }).click();
+  await expect(page.getByLabel("Two collaborators edit and checkpoint one brief live demo")).toBeVisible();
+  await page.getByRole("tab", { name: /Cookie auth without random logouts/ }).click();
+  await expect(page.getByLabel("A cookie session survives sleep and refresh live demo")).toBeVisible();
+});
+
+test("mobile state playbook contains its horizontal workbenches", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile");
+  await page.goto("/guide#guide-state");
+  await expect(page.getByRole("heading", { name: "Six hard cases, traced across real product surfaces." })).toBeVisible();
+  await page.getByRole("tab", { name: /Cookie auth without random logouts/ }).click();
+  await expect(page.getByText("Publishable key", { exact: true })).toBeVisible();
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(pageOverflow).toBeLessThanOrEqual(1);
 });
@@ -299,7 +376,9 @@ test("desktop developer guide source explorer visual", async ({ page }, testInfo
   await page.goto("/guide#guide-layers");
   await page.getByRole("button", { name: /Domain ExampleService/ }).click();
   await page.getByRole("combobox", { name: "ExampleService source file" }).selectOption("onboarding-policy");
-  await expect(page.locator(".layer-explorer")).toHaveScreenshot("developer-guide-source-explorer.png", { animations: "disabled" });
+  const layerExplorer = page.locator(".layer-explorer");
+  await layerExplorer.evaluate((element) => window.scrollTo(0, window.scrollY + element.getBoundingClientRect().top));
+  await expect(layerExplorer).toHaveScreenshot("developer-guide-source-explorer.png", { animations: "disabled" });
 });
 
 test("mobile examples visual and overflow", async ({ page }, testInfo) => {
@@ -309,4 +388,33 @@ test("mobile examples visual and overflow", async ({ page }, testInfo) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page).toHaveScreenshot("examples-mobile.png", { fullPage: true, animations: "disabled" });
+});
+
+test("component library onboarding explains ownership and renders interactive states", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await page.goto("/guide#guide-components");
+
+  await expect(page.getByRole("heading", { name: "Understand the system before you assemble the screen." })).toBeVisible();
+  await expect(page.getByText("Every new screen starts from tested decisions.")).toBeVisible();
+  const workbench = page.locator(".cl-workbench");
+  await workbench.getByRole("button", { name: /Text field/ }).click();
+  await workbench.getByRole("button", { name: "Error", exact: true }).click();
+  await expect(workbench.getByText("Use at least three characters.")).toBeVisible();
+  await workbench.getByLabel("Project name").fill("Release train");
+  await expect(workbench.getByLabel("Project name")).toHaveValue("Release train");
+  await workbench.getByRole("button", { name: /Review panel/ }).click();
+  await workbench.getByRole("button", { name: "Blocked" }).click();
+  await expect(workbench.getByText("Resolve the security review before approval.")).toBeVisible();
+  await expect(page.getByRole("link", { name: /Open component catalog/ }).last()).toHaveAttribute("href", "/system#primitives");
+});
+
+test("mobile component library onboarding stays inside the page", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile");
+  await page.goto("/guide#guide-components");
+  const workbench = page.locator(".cl-workbench");
+  await workbench.getByRole("button", { name: /Text field/ }).click();
+  await workbench.getByRole("button", { name: "Error", exact: true }).click();
+  await expect(workbench.getByText("Use at least three characters.")).toBeVisible();
+  const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(pageOverflow).toBeLessThanOrEqual(1);
 });

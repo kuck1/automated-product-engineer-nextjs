@@ -26,7 +26,10 @@ test("zero-flag install adds the universal skills and complete reference kit", (
   assert.ok(existsSync(path.join(project, ".automated-product-engineer", "docs", "architecture.md")));
   assert.ok(existsSync(path.join(project, ".automated-product-engineer", "templates", "ci", "github-actions.yml")));
   assert.ok(existsSync(path.join(project, ".automated-product-engineer", "src", "examples", "service.ts")));
+  assert.ok(existsSync(path.join(project, ".automated-product-engineer", "src", "guide", "state-management-playbook.tsx")));
   assert.ok(existsSync(path.join(project, ".automated-product-engineer", "src", "system", "design-system-explorer.tsx")));
+  assert.ok(existsSync(path.join(project, ".agents", "skills", "frontend-api-db", "references", "state-management-scenarios.md")));
+  assert.ok(existsSync(path.join(project, ".agents", "skills", "security-review", "references", "supabase-auth-sessions.md")));
   assert.ok(existsSync(path.join(project, ".cursor", "rules", "automated-product-engineer.mdc")));
   assert.ok(existsSync(path.join(project, ".github", "prompts", "automated-product-engineer.prompt.md")));
 });

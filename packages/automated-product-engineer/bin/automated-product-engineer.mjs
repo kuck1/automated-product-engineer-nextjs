@@ -49,8 +49,10 @@ const toolkitEntries = {
   examples: [
     "app/api/examples",
     "app/examples/page.tsx",
+    "app/guide/page.tsx",
     "app/system/page.tsx",
     "src/examples",
+    "src/guide",
     "src/system",
     "src/ui",
     "supabase/migrations",
@@ -210,6 +212,7 @@ ${included}
 - \`checklists/integration.md\`: implementation and review gates.
 - \`templates/\`: copyable contracts, components, tests, CI, automation, and retrospective files.
 - \`src/examples/\` and \`app/api/examples/\`: working vertical-slice examples.
+- \`src/guide/\` and \`app/guide/page.tsx\`: interactive architecture, component-library onboarding, and state-management playbooks.
 - \`src/system/\` and \`src/ui/\`: the interactive token and component system implementation.
 
 The selected agent adapter is **${target}**. Invoke \`automated-product-engineer\` for a complete feature or a specialist skill for focused work. The agent should inspect the host repository first, consult this kit for proven patterns, and adapt rather than copy blindly.

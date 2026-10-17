@@ -55,3 +55,7 @@ Define back, reset, close, refresh, retry, and resume behavior. Preserve recover
 ## Server authority
 
 The browser may improve usability, but it does not enforce security. The server validates identity, ownership, role, data shape, eligibility, and sensitive transitions on every mutation. Feature flags do not replace authorization.
+
+## Complex scenarios
+
+Use the installable [state-management scenario playbook](../skills/frontend-api-db/references/state-management-scenarios.md) for shared counters, out-of-order requests, multi-window saves, chat, collaborative documents, Realtime, and failure testing. Use the [Supabase auth and session guide](../skills/security-review/references/supabase-auth-sessions.md) for cookie-backed SSR, API-key boundaries, RLS, redirect loops, and random logout diagnosis.

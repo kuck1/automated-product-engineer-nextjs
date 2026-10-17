@@ -9,6 +9,8 @@ Review only the security impact introduced by the scoped diff. This is not a gen
 
 Read [references/threat-tracing.md](references/threat-tracing.md) for trust-boundary mapping, source-to-sink tracing, exploitability filters, and the required finding format.
 
+Read [references/supabase-auth-sessions.md](references/supabase-auth-sessions.md) when the scoped change uses Supabase Auth, cookie sessions, SSR clients, API keys, RLS, Realtime authorization, or reports intermittent logout and redirect failures.
+
 
 ## Intake and pushback
 

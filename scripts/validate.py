@@ -11,7 +11,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 PRIVATE_MARKERS = re.compile(
-    r"gosquad|GO-SQUAD-AI|staging\.gosquad|ryankuck@gmail|supabase\.co",
+    r"gosquad|GO-SQUAD-AI|staging\.gosquad|ryankuck@gmail|supabase\.co(?:/|\b)",
     re.IGNORECASE,
 )
 IGNORED_PARTS = {".git", ".next", ".vercel", "node_modules", "payload", "playwright-report", "test-results"}

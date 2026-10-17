@@ -9,6 +9,8 @@ Use this skill when the UI presents state as durable or shared. Optimistic state
 
 Read [references/full-stack-vertical-slice.md](references/full-stack-vertical-slice.md) for a concrete contract, race-handling sequence, migration questions, and focused test matrix.
 
+Read [references/state-management-scenarios.md](references/state-management-scenarios.md) when state crosses components, pages, tabs, windows, realtime channels, or users. It includes ownership decisions, points and aggregate updates, request races, multi-window writes, chat, collaborative editing, and a focused failure matrix.
+
 Read [references/analytics-instrumentation.md](references/analytics-instrumentation.md) when the feature adds or changes product analytics, experiments, impressions, mutation outcomes, or failure telemetry.
 
 

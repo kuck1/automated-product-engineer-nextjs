@@ -31,6 +31,7 @@ The concise `SKILL.md` files route to references when a task needs more depth. T
 - Architecture guidance retains encapsulation, extension over modification, typed boundaries, server-owned policy, failure contracts, and reviewable vertical slices.
 - Product analytics guidance retains measurement-first event design, client/server authority, semantic timing, identity and dedupe behavior, privacy-safe properties, and focused instrumentation tests.
 - Working case studies demonstrate UI state, server cache, transport, domain policy, repository ports, Supabase adapters, authorization, concurrency, optimistic updates, rollback, and browser verification.
+- The state-management playbook covers shared counters, request cancellation, multi-window revision conflicts, chat, collaborative documents, realtime roles, and Supabase cookie-session debugging; the same guidance ships in the frontend and security skills.
 - Templates preserve semantic tokens, enum-backed variants, component contracts, extension registries, hooks, focused tests, E2E and visual checks, CI, screenshot capture, retrospective, and pull-request structure.
 
 ## Deliberate exclusions
