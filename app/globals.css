@@ -437,15 +437,17 @@ footer > a:hover { color: white; }
 .guide-heading p { max-width: 670px; margin: 0; color: #959da6; font-size: 11px; line-height: 1.65; }
 .layer-explorer { min-width: 0; max-width: 100%; display: grid; grid-template-columns: minmax(280px,.8fr) minmax(0,1.4fr); gap: 12px; }
 .layer-stack { display: grid; gap: 6px; }
-.layer-stack button { width: 100%; min-height: 98px; padding: 14px; display: grid; grid-template-columns: 29px 1fr 18px; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); color: #aeb5bc; cursor: pointer; }
+.layer-stack button { width: 100%; min-height: 98px; padding: 14px; display: grid; grid-template-columns: 29px minmax(0,1fr) 28px; align-items: center; gap: 10px; overflow: hidden; text-align: left; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); color: #aeb5bc; cursor: pointer; }
 .layer-stack button:hover, .layer-stack button.active { border-color: rgba(169,145,255,.34); background: rgba(169,145,255,.075); }
 .layer-stack button > span { color: var(--accent); font: 700 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.layer-stack button > div { min-width: 0; }
 .layer-stack button small, .layer-stack button strong, .layer-stack button p { display: block; }
 .layer-stack button small { color: #7f8993; font-size: 7px; text-transform: uppercase; letter-spacing: 1px; }
-.layer-stack button strong { margin: 5px 0 3px; color: white; font-size: 12px; }
+.layer-stack button strong { margin: 5px 0 3px; overflow-wrap: anywhere; color: white; font-size: 12px; }
 .layer-stack button p { margin: 0; color: #89929c; font-size: 8px; line-height: 1.4; }
-.layer-stack button > svg { color: #59636f; }
-.layer-stack button.active > svg { color: var(--accent); }
+.layer-stack button > svg { box-sizing: content-box; justify-self: end; padding: 5px; border-radius: 999px; background: rgba(255,255,255,.035); color: #68727d; transition: color .16s ease, background .16s ease, transform .16s ease; }
+.layer-stack button:hover > svg, .layer-stack button:focus-visible > svg { color: #b9c1c9; transform: translateX(2px); }
+.layer-stack button.active > svg { background: rgba(169,145,255,.12); color: var(--accent); }
 .source-reader { min-width: 0; padding: 24px; display: flex; flex-direction: column; border: 1px solid rgba(169,145,255,.22); border-radius: 13px; background: #16141c; }
 .source-reader > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
 .source-reader > header span, .source-reader > header strong { display: block; }
@@ -848,8 +850,8 @@ footer > a:hover { color: white; }
   .release-summary { grid-template-columns: repeat(3,1fr); }
   .release-summary > div:first-child { grid-column: 1 / -1; }
   .layer-explorer { grid-template-columns: 1fr; }
-  .layer-stack { min-width: 0; max-width: 100%; grid-template-columns: repeat(5,minmax(190px,1fr)); overflow-x: auto; }
-  .layer-stack button { min-width: 190px; }
+  .layer-stack { min-width: 0; max-width: 100%; padding: 2px 20px 10px 2px; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: clamp(220px,32vw,280px); overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline proximity; }
+  .layer-stack button { min-width: 0; scroll-snap-align: start; }
   .guide-intro { grid-template-columns: 1fr; }
   .guide-intro dl { flex-wrap: wrap; }
   .verification-grid { grid-template-columns: repeat(3,1fr); }
@@ -966,8 +968,8 @@ footer > a:hover { color: white; }
   .guide-nav { margin: 0; padding: 0 10px; }
   .guide-section { padding: 44px 0; }
   .guide-heading { grid-template-columns: 1fr; gap: 10px; }
-  .layer-stack { width: 100%; margin-right: 0; padding-right: 16px; grid-template-columns: repeat(5,minmax(175px,1fr)); }
-  .layer-stack button { min-width: 175px; min-height: 104px; }
+  .layer-stack { width: 100%; margin-right: 0; padding-right: 16px; grid-auto-columns: clamp(210px,72vw,248px); }
+  .layer-stack button { min-width: 0; min-height: 112px; }
   .source-reader { min-height: 0; padding: 18px; }
   .source-reader > header { display: grid; }
   .source-reader-actions { width: 100%; min-width: 0; justify-items: stretch; }
